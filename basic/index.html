@@ -1,0 +1,17 @@
+<script>
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET','xxx?wd=s');
+  xhr.setRequestHeader('x-iii','ooo')
+  xhr.send();
+
+//每一次readyState变化浏览器都会调用onreadystatechange函数
+xhr.onreadystatechange = function(){
+  if(xhr.readyState === 4){      //响应下载完毕
+    if(xhr.status>=200 && xhr.status<300){
+      console('sucess')
+    }else{
+      console.log('fail')
+    }
+  }
+}
+</script>
