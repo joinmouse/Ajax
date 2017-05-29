@@ -1,0 +1,1 @@
+ajax的基本原理可参考Issues
