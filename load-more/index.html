@@ -5,9 +5,77 @@
   <title>Document</title>
 </head>
 <body>
-  <ul>
+  <ul class="ct">
+    <li>内容0</li>
     <li>内容1</li>
-    <li>内容2</li>
   </ul>
+  <a href="#" class="load-more">加载更多</a>
+
+
+
+  <script>
+    var ct = document.querySelector('.ct')
+    var btn = document.querySelector('.load-more')
+
+    var idx = 2         //当前加载数据的序号
+    var len = 5         //每次加载数据的个数
+    var isLoading = false   //状态锁，用于判断是否正在加载数据
+
+    btn.addEventListener('click',function(){
+      if(isLoading){        //如果正在请求数据，那么这次点击退出
+        return
+      }
+    //当isLoading为false时，跳出if判断，表明没有正在发出的请求，从而执行下面请求
+    /*定义接口
+    1、url
+    2、入参：{start:2,len:5}
+    3、回参：{
+      status:1      //1表示正常，0代表出错
+      data:[2,3,4,5,6]
+    }
+    */
+      ajax('/loadMore',{
+        idx: idx,
+        len: len
+      },function(data){
+        appendDate(data);
+        isLoading = false;   //数据到来之后状态锁解除
+        idx = idx + len;     //修改序号
+      });
+
+      isLoading = true    //发请求之前标记加状态锁
+    })  
+
+//ajax的get方式封装
+
+    function ajax(url,json,onSuccess,onError){
+      var xhr = new XMLHttpRequest()
+      var arr = []
+      for (key in json) {
+        arr.push(key + '=' + json[key])
+      }
+      url += '?' + arr.join('&')
+      xhr.open('get',url)
+      xhr.send()
+
+      xhr.onload = function(){
+        if((xhr.status >= 200 && xhr.status < 300) || (xhr.status ===304)){
+          onSuccess(JSON.parse(this.response))
+        }else{
+          onError && onError()
+        }
+      }
+    }
+
+//定义从服务器取回的参数在html页面的处理(添加内容)
+    function appendDate(data){
+      for(var i=0;i<data.length;i++){
+        var loadLi = document.createElement('li');
+        loadLi.innerText = data[i];
+        ct.appendChild(loadLi)
+      }
+    }
+
+  </script>
 </body>
 </html>
