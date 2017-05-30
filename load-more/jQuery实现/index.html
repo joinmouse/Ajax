@@ -12,7 +12,7 @@
   <a href="#" class="load-more">加载更多</a>
 
 
-
+  <script src="http://apps.bdimg.com/libs/jquery/1.6.2/jquery.min.js"></script>
   <script>
     var $ct = $('.ct')
     var $btn = $('.load-more')
@@ -21,7 +21,7 @@
     var len = 5          //每次加载数据的个数
     var isLoading = false   //状态锁，用于判断是否正在加载数据
 
-    $btn.on('click',function(){
+    $btn.bind('click',function(){
       if(isLoading){        //如果正在请求数据，那么这次点击退出
         return
       }
@@ -36,13 +36,13 @@
     */
       $.ajax({
         type: 'get',
-        url: '/loadMore',
+        url: 'loadMore',
         data: {
           idx:idx,
           len:len
         },
         dataType: 'json',
-        sucess: function(data) {
+        sucess: function() {
           appendDate(data);
           isLoading = false;   //数据到来之后状态锁解除
           idx = idx + len;     //修改序号
@@ -59,13 +59,13 @@
 //定义从服务器取回的参数在html页面的处理(添加内容)
     function appendDate(data){
       for(var i=0;i<data.length;i++){
-        var loadLi = document.createElement('li');
-        loadLi.innerText = data[i];
-        ct.appendChild(loadLi)
+        var loadLi = $("<li></li>")
+        loadLi.text(data[i])
+        $ct.append(loadLi)
       }
     }
 
   </script>
-  <script src="http://apps.bdimg.com/libs/jquery/1.6.2/jquery.min.js"></script>
+
 </body>
 </html>
