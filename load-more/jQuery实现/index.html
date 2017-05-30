@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <ul class="ct">
+    <li>内容0</li>
+    <li>内容1</li>
+  </ul>
+  <a href="#" class="load-more">加载更多</a>
+
+
+
+  <script>
+    var $ct = $('.ct')
+    var $btn = $('.load-more')
+
+    var idx = 2          //当前加载数据的序号
+    var len = 5          //每次加载数据的个数
+    var isLoading = false   //状态锁，用于判断是否正在加载数据
+
+    $btn.on('click',function(){
+      if(isLoading){        //如果正在请求数据，那么这次点击退出
+        return
+      }
+    //当isLoading为false时，跳出if判断，表明没有正在发出的请求，从而执行下面请求
+    /*定义接口
+    1、url
+    2、入参：{start:2,len:5}
+    3、回参：{
+      status:1      //1表示正常，0代表出错
+      data:[2,3,4,5,6]
+    }
+    */
+      $.ajax({
+        type: 'get',
+        url: '/loadMore',
+        data: {
+          idx:idx,
+          len:len
+        },
+        dataType: 'json',
+        sucess: function(data) {
+          appendDate(data);
+          isLoading = false;   //数据到来之后状态锁解除
+          idx = idx + len;     //修改序号
+        },
+        error: function(){
+          console.log('error...')
+        }
+      })
+
+      isLoading = true    //发请求之前标记加状态锁
+    })  
+  
+
+//定义从服务器取回的参数在html页面的处理(添加内容)
+    function appendDate(data){
+      for(var i=0;i<data.length;i++){
+        var loadLi = document.createElement('li');
+        loadLi.innerText = data[i];
+        ct.appendChild(loadLi)
+      }
+    }
+
+  </script>
+  <script src="http://apps.bdimg.com/libs/jquery/1.6.2/jquery.min.js"></script>
+</body>
+</html>
