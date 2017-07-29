@@ -8,12 +8,13 @@
   <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-  <button>获取天气</button>
-  <p>天气是：</p>
+  <p>获取天气</p>
+  <div>天气是：</div>
 </body>
 
   <script>
-    $('button').on('click',function(){
+    $('p').on('click',function(){
+      console.log(1)
       $.ajax({
         type: 'get',
         url: '//jirenguapi.applinzi.com/city.php',
