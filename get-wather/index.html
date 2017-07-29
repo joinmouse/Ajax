@@ -18,19 +18,13 @@
         type: 'get',
         url: '//jirenguapi.applinzi.com/city.php',
         dataType: 'json',
-        sucess: function() {
-          appendDate(data)
-          console.log(1)
+        sucess: function(data) {
+          console.log(data)
         },
         error: function(){
           console.log('error...')
         }
     })
-
-    function appendDate(data) {
-      $('p').text = '天气是:' + data;
-    }
-  })  
   
   
   </script>
